@@ -1,17 +1,20 @@
 package com.stanzione.useralbumsvolley;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -80,6 +83,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
                                 Photo photo = gson.fromJson(String.valueOf(response.getJSONObject(i)), Photo.class);
 
                                 Log.d(TAG, photo.getTitle());
+                                downloadImage(photo.getThumbnailUrl(), i);
 
                                 photoArrayList.add(photo);
 
@@ -101,6 +105,32 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
         );
         // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest);
+
+    }
+
+    public void downloadImage(String url, final int photoPosition) {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // Request a JSON array response from the provided URL.
+        ImageRequest imageRequest = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        photoArrayList.get(photoPosition).setThumbnailBitmap(bitmap);
+                        photosRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                }, 150, 150, ImageView.ScaleType.CENTER_INSIDE, null, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "Error: " + error);
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(imageRequest);
 
     }
 

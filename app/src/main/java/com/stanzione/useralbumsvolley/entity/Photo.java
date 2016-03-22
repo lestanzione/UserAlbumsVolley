@@ -1,11 +1,14 @@
 package com.stanzione.useralbumsvolley.entity;
 
+import android.graphics.Bitmap;
+
 public class Photo {
 
     private long id;
     private String title;
     private String url;
     private String thumbnailUrl;
+    private Bitmap thumbnailBitmap;
 
     public long getId() {
         return id;
@@ -38,5 +41,13 @@ public class Photo {
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
     }
-    
+
+    public Bitmap getThumbnailBitmap() {
+        return thumbnailBitmap;
+    }
+
+    public void setThumbnailBitmap(Bitmap thumbnailBitmap) {
+        this.thumbnailBitmap = thumbnailBitmap;
+    }
+
 }
