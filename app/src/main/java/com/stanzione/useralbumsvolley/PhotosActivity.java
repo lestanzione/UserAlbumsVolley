@@ -33,6 +33,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
 
     private TextView photoAlbumTitleTextView;
     private RecyclerView photosRecyclerView;
+    private UserRecyclerDecoration userRecyclerDecoration;
 
     private ArrayList<Photo> photoArrayList;
 
@@ -52,59 +53,87 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
 
         photoAlbumTitleTextView.setText(albumTitle);
 
+        userRecyclerDecoration = new UserRecyclerDecoration(20, 20, 10, 10);
+
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "http://jsonplaceholder.typicode.com/photos?albumId=" + albumId;
+        Log.d(TAG, "onSaveInstanceState - PhotosActivity");
+        savedInstanceState.putSerializable("SAVED_PHOTOS", photoArrayList);
 
-        Log.d(TAG, "Starting Volley Request");
+        super.onSaveInstanceState(savedInstanceState);
 
-        // Request a JSON array response from the provided URL.
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
-                new Response.Listener<JSONArray>() {
+    }
 
-                    @Override
-                    public void onResponse(JSONArray response) {
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-                        Log.d(TAG, "Photos found: " + response.length());
+        Log.d(TAG, "onRestoreInstanceState - PhotosActivity");
+        photoArrayList = (ArrayList<Photo>) savedInstanceState.getSerializable("SAVED_PHOTOS");
 
-                        photoArrayList = new ArrayList<Photo>();
+    }
 
-                        Gson gson = new GsonBuilder().create();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-                        for(int i=0; i<response.length(); i++){
+        if(photoArrayList != null){
+            showPhotos();
+        }
+        else {
 
-                            try {
-                                Photo photo = gson.fromJson(String.valueOf(response.getJSONObject(i)), Photo.class);
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(this);
+            final String url = "http://jsonplaceholder.typicode.com/photos?albumId=" + albumId;
 
-                                Log.d(TAG, photo.getTitle());
-                                downloadImage(photo.getThumbnailUrl(), i);
+            Log.d(TAG, "Starting Volley Request");
 
-                                photoArrayList.add(photo);
+            // Request a JSON array response from the provided URL.
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
+                    new Response.Listener<JSONArray>() {
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            Log.d(TAG, "Photos found: " + response.length());
+
+                            photoArrayList = new ArrayList<Photo>();
+
+                            Gson gson = new GsonBuilder().create();
+
+                            for (int i = 0; i < response.length(); i++) {
+
+                                try {
+                                    Photo photo = gson.fromJson(String.valueOf(response.getJSONObject(i)), Photo.class);
+
+                                    Log.d(TAG, photo.getTitle());
+                                    downloadImage(photo.getThumbnailUrl(), i);
+
+                                    photoArrayList.add(photo);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
 
+                            showPhotos();
+
                         }
-
-                        showPhotos();
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error: " + error);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "Error: " + error);
+                }
             }
+            );
+            // Add the request to the RequestQueue.
+            queue.add(jsonArrayRequest);
+
         }
-        );
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
 
     }
 
@@ -138,7 +167,9 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
         PhotoRecyclerAdapter photoRecyclerAdapter = new PhotoRecyclerAdapter(PhotosActivity.this, photoArrayList, this);
         photosRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         photosRecyclerView.setAdapter(photoRecyclerAdapter);
-        photosRecyclerView.addItemDecoration(new UserRecyclerDecoration(20, 20, 10, 10));
+
+        photosRecyclerView.removeItemDecoration(userRecyclerDecoration);
+        photosRecyclerView.addItemDecoration(userRecyclerDecoration);
     }
 
     @Override

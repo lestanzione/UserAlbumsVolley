@@ -2,7 +2,9 @@ package com.stanzione.useralbumsvolley.entity;
 
 import android.graphics.Bitmap;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable{
 
     private long id;
     private String title;

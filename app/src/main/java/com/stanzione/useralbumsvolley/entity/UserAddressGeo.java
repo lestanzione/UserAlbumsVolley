@@ -2,7 +2,9 @@ package com.stanzione.useralbumsvolley.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserAddressGeo {
+import java.io.Serializable;
+
+public class UserAddressGeo implements Serializable {
 
     @SerializedName("lat") private double latitude;
     @SerializedName("lng") private double longitude;

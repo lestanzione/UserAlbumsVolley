@@ -40,6 +40,7 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
 
     private Button getUsersButton;
     private RecyclerView usersRecyclerView;
+    private UserRecyclerDecoration userRecyclerDecoration;
 
     private ArrayList<User> userArrayList;
 
@@ -57,6 +58,28 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
                 getUsers();
             }
         });
+
+        userRecyclerDecoration = new UserRecyclerDecoration(20, 20, 10, 10);
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+
+        Log.d(TAG, "onSaveInstanceState - UsersActivity");
+        savedInstanceState.putSerializable("SAVED_USERS", userArrayList);
+
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        Log.d(TAG, "onRestoreInstanceState - UsersActivity");
+        userArrayList = (ArrayList<User>) savedInstanceState.getSerializable("SAVED_USERS");
+        showUsers();
 
     }
 
@@ -115,7 +138,12 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
         UserRecyclerAdapter userRecyclerAdapter = new UserRecyclerAdapter(UsersActivity.this, userArrayList, this);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         usersRecyclerView.setAdapter(userRecyclerAdapter);
-        usersRecyclerView.addItemDecoration(new UserRecyclerDecoration(20, 20, 10, 10));
+
+        //remove current item decoration
+        //we need to do that to prevent doubling the margin if the user runs the search again
+        usersRecyclerView.removeItemDecoration(userRecyclerDecoration);
+
+        usersRecyclerView.addItemDecoration(userRecyclerDecoration);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.stanzione.useralbumsvolley.entity;
 
-public class UserCompany {
+import java.io.Serializable;
+
+public class UserCompany implements Serializable{
 
     private String name;
     private String catchPhrase;

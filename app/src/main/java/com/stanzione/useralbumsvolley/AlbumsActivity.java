@@ -28,6 +28,7 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
     private static final String TAG = UsersActivity.class.getSimpleName();
 
     private RecyclerView albumsRecyclerView;
+    private UserRecyclerDecoration userRecyclerDecoration;
 
     private ArrayList<Album> albumArrayList;
 
@@ -42,59 +43,86 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
 
         userId = getIntent().getLongExtra("USER_ID", 0);
 
+        userRecyclerDecoration = new UserRecyclerDecoration(20, 20, 10, 10);
+
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+
+        Log.d(TAG, "onSaveInstanceState - AlbumsActivity");
+        savedInstanceState.putSerializable("SAVED_ALBUMS", albumArrayList);
+
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final String url = "http://jsonplaceholder.typicode.com/albums?userId=" + userId;
+        Log.d(TAG, "onRestoreInstanceState - AlbumsActivity");
+        albumArrayList = (ArrayList<Album>) savedInstanceState.getSerializable("SAVED_ALBUMS");
 
-        Log.d(TAG, "Starting Volley Request");
+    }
 
-        // Request a JSON array response from the provided URL.
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
-                new Response.Listener<JSONArray>() {
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-                    @Override
-                    public void onResponse(JSONArray response) {
+        if(albumArrayList != null){
+            showAlbums();
+        }
+        else {
 
-                        Log.d(TAG, "Albums found: " + response.length());
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(this);
+            final String url = "http://jsonplaceholder.typicode.com/albums?userId=" + userId;
 
-                        albumArrayList = new ArrayList<Album>();
+            Log.d(TAG, "Starting Volley Request");
 
-                        Gson gson = new GsonBuilder().create();
+            // Request a JSON array response from the provided URL.
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
+                    new Response.Listener<JSONArray>() {
 
-                        for(int i=0; i<response.length(); i++){
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                            try {
-                                Album album = gson.fromJson(String.valueOf(response.getJSONObject(i)), Album.class);
+                            Log.d(TAG, "Albums found: " + response.length());
 
-                                Log.d(TAG, album.getTitle());
+                            albumArrayList = new ArrayList<Album>();
 
-                                albumArrayList.add(album);
+                            Gson gson = new GsonBuilder().create();
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            for (int i = 0; i < response.length(); i++) {
+
+                                try {
+                                    Album album = gson.fromJson(String.valueOf(response.getJSONObject(i)), Album.class);
+
+                                    Log.d(TAG, album.getTitle());
+
+                                    albumArrayList.add(album);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
 
+                            showAlbums();
+
                         }
-
-                        showAlbums();
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Error: " + error);
-                    }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG, "Error: " + error);
                 }
-        );
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
+            }
+            );
+            // Add the request to the RequestQueue.
+            queue.add(jsonArrayRequest);
+
+        }
 
     }
 
@@ -102,7 +130,9 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
         AlbumRecyclerAdapter albumRecyclerAdapter = new AlbumRecyclerAdapter(AlbumsActivity.this, albumArrayList, this);
         albumsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         albumsRecyclerView.setAdapter(albumRecyclerAdapter);
-        albumsRecyclerView.addItemDecoration(new UserRecyclerDecoration(20, 20, 10, 10));
+
+        albumsRecyclerView.removeItemDecoration(userRecyclerDecoration);
+        albumsRecyclerView.addItemDecoration(userRecyclerDecoration);
     }
 
     @Override

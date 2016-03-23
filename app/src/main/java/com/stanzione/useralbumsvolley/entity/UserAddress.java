@@ -1,6 +1,8 @@
 package com.stanzione.useralbumsvolley.entity;
 
-public class UserAddress {
+import java.io.Serializable;
+
+public class UserAddress implements Serializable{
 
     private String street;
     private String suite;

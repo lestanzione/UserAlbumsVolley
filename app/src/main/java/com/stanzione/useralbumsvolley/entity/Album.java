@@ -1,6 +1,8 @@
 package com.stanzione.useralbumsvolley.entity;
 
-public class Album {
+import java.io.Serializable;
+
+public class Album implements Serializable{
 
     private long id;
     private String title;
