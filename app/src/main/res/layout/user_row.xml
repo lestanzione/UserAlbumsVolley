@@ -17,15 +17,42 @@
             android:layout_height="wrap_content"
             android:id="@+id/userNameTextView"
             android:text="User Name"
-            android:layout_margin="8dp"/>
-
+			android:textSize="18sp"
+            android:layout_marginTop="8dp"
+			android:layout_marginLeft="8dp"
+			android:layout_marginStart="8dp"/>
+		
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/userCityTextView"
+			android:text="User City"
+			android:textSize="14sp"
+			android:layout_below="@+id/userNameTextView"
+			android:layout_marginTop="4dp"
+			android:layout_marginLeft="8dp"
+			android:layout_marginStart="8dp"/>
+		
+		<Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfileButton"
+            android:text="Profile"
+			android:layout_below="@id/userCityTextView"
+            android:layout_marginTop="8dp"
+			android:layout_marginLeft="8dp"
+			android:layout_marginStart="8dp"/>
+			
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/userAlbumsButton"
             android:text="Albums"
-            android:layout_below="@id/userNameTextView"
-            android:layout_margin="8dp"/>
+            android:layout_below="@id/userCityTextView"
+			android:layout_toRightOf="@id/userProfileButton"
+            android:layout_marginTop="8dp"
+			android:layout_marginLeft="8dp"
+			android:layout_marginStart="8dp"/>
 
     </RelativeLayout>
 

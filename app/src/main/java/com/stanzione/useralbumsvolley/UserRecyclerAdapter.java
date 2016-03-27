@@ -48,6 +48,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         final User user = userArrayList.get(position);
 
         holder.userNameTextView.setText(user.getName());
+		holder.userCityTextView.setText("from " + user.getAddress().getCity());
         holder.userAlbumsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +66,14 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CardView userCardView;
         public TextView userNameTextView;
+		public TextView userCityTextView;
         public Button userAlbumsButton;
 
         public ViewHolder(View userView) {
             super(userView);
             //this.userCardView = (CardView) userView.findViewById(R.id.userCardView);
             this.userNameTextView = (TextView) userView.findViewById(R.id.userNameTextView);
+			this.userCityTextView = (TextView) userView.findViewById(R.id.userCityTextView);
             this.userAlbumsButton = (Button) userView.findViewById(R.id.userAlbumsButton);
         }
     }
