@@ -14,6 +14,7 @@ import com.stanzione.useralbumsvolley.entity.User;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import com.like.*;
 
 public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdapter.ViewHolder>{
 
@@ -62,11 +63,13 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CardView albumCardView;
         public TextView albumTitleTextView;
+		public LikeButton albumFavoriteButton;
 
         public ViewHolder(View userView) {
             super(userView);
             this.albumCardView = (CardView) userView.findViewById(R.id.albumCardView);
             this.albumTitleTextView = (TextView) userView.findViewById(R.id.albumTitleTextView);
+			this.albumFavoriteButton = (LikeButton) userView.findViewById(R.id.albumFavoriteButton);
         }
     }
 

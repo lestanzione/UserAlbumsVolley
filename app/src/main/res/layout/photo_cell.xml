@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
-    android:id="@+id/photoCardView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/photoCardView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     card_view:cardCornerRadius="5dp"
@@ -14,5 +15,13 @@
         android:id="@+id/photoImageView"
         android:layout_gravity="center_horizontal|center_vertical"
         android:background="@android:color/darker_gray"/>
+	
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="70dp"
+		android:id="@+id/photoOverlayView"
+		android:background="@android:color/darker_gray"
+		android:layout_alignBottom="@id/photoImageView"
+		android:alpha="0.5"/>
 
 </android.support.v7.widget.CardView>
