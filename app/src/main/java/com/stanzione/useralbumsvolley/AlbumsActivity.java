@@ -1,6 +1,8 @@
 package com.stanzione.useralbumsvolley;
 
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +34,7 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
     private static final String TAG = UsersActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    private CoordinatorLayout coordinatorLayout;
     private RecyclerView albumsRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
     private ProgressBar progressBar;
@@ -52,6 +55,7 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.albumsCoordinatorLayout);
         albumsRecyclerView = (RecyclerView) findViewById(R.id.albumsRecyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -133,6 +137,7 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
                 public void onErrorResponse(VolleyError error) {
                     Log.d(TAG, "Error: " + error);
                     progressBar.setVisibility(View.INVISIBLE);
+                    Snackbar.make(coordinatorLayout, "Could not get albums from server", Snackbar.LENGTH_SHORT).show();
                 }
             }
             );

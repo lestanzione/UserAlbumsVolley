@@ -2,6 +2,8 @@ package com.stanzione.useralbumsvolley;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +43,7 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
     private static final String TAG = UsersActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    private CoordinatorLayout coordinatorLayout;
     private Button getUsersButton;
     private RecyclerView usersRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
@@ -60,6 +63,7 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setHomeButtonEnabled(true);
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.usersCoordinatorLayout);
         getUsersButton = (Button) findViewById(R.id.getUsersButton);
         usersRecyclerView = (RecyclerView) findViewById(R.id.usersRecyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -141,6 +145,7 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error: " + error);
                         progressBar.setVisibility(View.INVISIBLE);
+                        Snackbar.make(coordinatorLayout, "Could not get users from server", Snackbar.LENGTH_SHORT).show();
                     }
                 }
         );

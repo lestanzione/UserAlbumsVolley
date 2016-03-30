@@ -1,6 +1,8 @@
 package com.stanzione.useralbumsvolley;
 
 import android.graphics.Bitmap;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,6 +38,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
     private static final String TAG = UsersActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    private CoordinatorLayout coordinatorLayout;
     private TextView photoAlbumTitleTextView;
     private RecyclerView photosRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
@@ -58,6 +61,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.photosCoordinatorLayout);
         photoAlbumTitleTextView = (TextView) findViewById(R.id.photosAlbumTitleTextView);
         photosRecyclerView = (RecyclerView) findViewById(R.id.photosRecyclerView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -144,6 +148,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
                 public void onErrorResponse(VolleyError error) {
                     Log.d(TAG, "Error: " + error);
                     progressBar.setVisibility(View.INVISIBLE);
+                    Snackbar.make(coordinatorLayout, "Could not get photos from server", Snackbar.LENGTH_SHORT).show();
                 }
             }
             );

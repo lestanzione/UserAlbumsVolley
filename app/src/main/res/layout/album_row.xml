@@ -32,6 +32,8 @@
 			android:layout_height="200dp"
 			android:id="@+id/albumImageView"
 			android:background="@android:color/darker_gray"
+            android:src="@drawable/album_1"
+            android:scaleType="fitXY"
 			android:layout_below="@id/albumTitleTextView"
             android:layout_marginTop="12dp"
 			android:layout_marginLeft="8dp"
