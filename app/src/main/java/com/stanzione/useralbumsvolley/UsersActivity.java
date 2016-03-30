@@ -6,9 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,9 +40,11 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
 
     private static final String TAG = UsersActivity.class.getSimpleName();
 
+    private Toolbar toolbar;
     private Button getUsersButton;
     private RecyclerView usersRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
+    private ProgressBar progressBar;
 
     private ArrayList<User> userArrayList;
 
@@ -49,8 +53,16 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Users");
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+
         getUsersButton = (Button) findViewById(R.id.getUsersButton);
         usersRecyclerView = (RecyclerView) findViewById(R.id.usersRecyclerView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         getUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +103,8 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
 
         Log.d(TAG, "Starting Volley Request");
 
+        progressBar.setVisibility(View.VISIBLE);
+
         // Request a JSON array response from the provided URL.
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url,
                 new Response.Listener<JSONArray>() {
@@ -126,6 +140,7 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error: " + error);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 }
         );
@@ -144,6 +159,8 @@ public class UsersActivity extends AppCompatActivity implements UserRecyclerAdap
         usersRecyclerView.removeItemDecoration(userRecyclerDecoration);
 
         usersRecyclerView.addItemDecoration(userRecyclerDecoration);
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

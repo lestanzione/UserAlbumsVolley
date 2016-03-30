@@ -69,6 +69,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
         final Photo photo = photoArrayList.get(position);
 
         holder.photoImageView.setImageBitmap(photo.getThumbnailBitmap());
+        holder.photoTitletextView.setText(photo.getTitle());
 
         //downloadImage(photo.getThumbnailUrl(), holder.photoImageView);
 
@@ -84,11 +85,13 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CardView photoCardView;
         public ImageView photoImageView;
+        public TextView photoTitletextView;
 
         public ViewHolder(View photoView) {
             super(photoView);
             this.photoCardView = (CardView) photoView.findViewById(R.id.photoCardView);
             this.photoImageView = (ImageView) photoView.findViewById(R.id.photoImageView);
+            this.photoTitletextView = (TextView) photoView.findViewById(R.id.photoTitleTextView);
         }
     }
 

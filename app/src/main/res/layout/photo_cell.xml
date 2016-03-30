@@ -15,13 +15,34 @@
         android:id="@+id/photoImageView"
         android:layout_gravity="center_horizontal|center_vertical"
         android:background="@android:color/darker_gray"/>
-	
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="70dp"
-		android:id="@+id/photoOverlayView"
-		android:background="@android:color/darker_gray"
-		android:layout_alignBottom="@id/photoImageView"
-		android:alpha="0.5"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/photoOverlayView"
+            android:background="@android:color/darker_gray"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/photoTitleTextView"
+            android:text="Test"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_alignTop="@id/photoOverlayView"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"/>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -31,9 +35,11 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
 
     private static final String TAG = UsersActivity.class.getSimpleName();
 
+    private Toolbar toolbar;
     private TextView photoAlbumTitleTextView;
     private RecyclerView photosRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
+    private ProgressBar progressBar;
 
     private ArrayList<Photo> photoArrayList;
 
@@ -45,8 +51,16 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Photos");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         photoAlbumTitleTextView = (TextView) findViewById(R.id.photosAlbumTitleTextView);
         photosRecyclerView = (RecyclerView) findViewById(R.id.photosRecyclerView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         albumId = getIntent().getLongExtra("ALBUM_ID", 0);
         albumTitle = getIntent().getStringExtra("ALBUM_TITLE");
@@ -84,6 +98,8 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
             showPhotos();
         }
         else {
+
+            progressBar.setVisibility(View.VISIBLE);
 
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
@@ -127,6 +143,7 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.d(TAG, "Error: " + error);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
             );
@@ -170,10 +187,23 @@ public class PhotosActivity extends AppCompatActivity implements PhotoRecyclerAd
 
         photosRecyclerView.removeItemDecoration(userRecyclerDecoration);
         photosRecyclerView.addItemDecoration(userRecyclerDecoration);
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void photoSelected(long id) {
         Log.d(TAG, "id selected: " + id);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

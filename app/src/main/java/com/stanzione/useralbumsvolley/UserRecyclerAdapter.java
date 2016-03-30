@@ -2,6 +2,7 @@ package com.stanzione.useralbumsvolley;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.stanzione.useralbumsvolley.entity.User;
 
 import java.lang.ref.WeakReference;
@@ -49,6 +51,45 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
         holder.userNameTextView.setText(user.getName());
 		holder.userCityTextView.setText("from " + user.getAddress().getCity());
+
+        Drawable drawable = null;
+
+        switch (position+1){
+            case 1:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_1);
+                break;
+            case 2:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_2);
+                break;
+            case 3:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_3);
+                break;
+            case 4:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_4);
+                break;
+            case 5:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_5);
+                break;
+            case 6:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_6);
+                break;
+            case 7:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_7);
+                break;
+            case 8:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_8);
+                break;
+            case 9:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_9);
+                break;
+            case 10:
+                drawable = ContextCompat.getDrawable(context, R.drawable.user_10);
+                break;
+        }
+
+
+        holder.userImageView.setImageDrawable(drawable);
+
         holder.userAlbumsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +108,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         public CardView userCardView;
         public TextView userNameTextView;
 		public TextView userCityTextView;
+        public RoundedImageView userImageView;
         public Button userAlbumsButton;
 
         public ViewHolder(View userView) {
@@ -74,6 +116,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             //this.userCardView = (CardView) userView.findViewById(R.id.userCardView);
             this.userNameTextView = (TextView) userView.findViewById(R.id.userNameTextView);
 			this.userCityTextView = (TextView) userView.findViewById(R.id.userCityTextView);
+            this.userImageView = (RoundedImageView) userView.findViewById(R.id.userImageView);
             this.userAlbumsButton = (Button) userView.findViewById(R.id.userAlbumsButton);
         }
     }

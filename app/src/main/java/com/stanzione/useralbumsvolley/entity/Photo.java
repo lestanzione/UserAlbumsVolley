@@ -10,7 +10,7 @@ public class Photo implements Serializable{
     private String title;
     private String url;
     private String thumbnailUrl;
-    private Bitmap thumbnailBitmap;
+    private transient Bitmap thumbnailBitmap;
 
     public long getId() {
         return id;

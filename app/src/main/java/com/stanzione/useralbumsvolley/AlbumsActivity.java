@@ -5,7 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,8 +31,10 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
 
     private static final String TAG = UsersActivity.class.getSimpleName();
 
+    private Toolbar toolbar;
     private RecyclerView albumsRecyclerView;
     private UserRecyclerDecoration userRecyclerDecoration;
+    private ProgressBar progressBar;
 
     private ArrayList<Album> albumArrayList;
 
@@ -39,7 +45,15 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Albums");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         albumsRecyclerView = (RecyclerView) findViewById(R.id.albumsRecyclerView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         userId = getIntent().getLongExtra("USER_ID", 0);
 
@@ -74,6 +88,8 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
             showAlbums();
         }
         else {
+
+            progressBar.setVisibility(View.VISIBLE);
 
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
@@ -116,6 +132,7 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.d(TAG, "Error: " + error);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
             );
@@ -133,6 +150,8 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
 
         albumsRecyclerView.removeItemDecoration(userRecyclerDecoration);
         albumsRecyclerView.addItemDecoration(userRecyclerDecoration);
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -146,6 +165,16 @@ public class AlbumsActivity extends AppCompatActivity implements AlbumRecyclerAd
 
         startActivity(intent);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
